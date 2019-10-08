@@ -16,11 +16,11 @@ You run it, then from your remote scripts/apps you post to it's logging endpoint
 
 To send a log, you post the following JSON:
 
-{ "Category":"DEBUG", "Message":"Message text here..." }
+***{ "Category":"DEBUG", "Message":"Message text here..." }***
 
 to
 
-/logger/postlogmessage
+***/logger/postlogmessage***
 
 Category can be one of:
 
