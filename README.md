@@ -24,10 +24,10 @@ to
 
 Category can be one of:
 
-ERROR
-DEBUG
-INFO
-WARNING
+* ERROR  
+* DEBUG  
+* INFO  
+* WARNING  
 
 These correspond to the 4 rules in the site.css file with the same names.
 
