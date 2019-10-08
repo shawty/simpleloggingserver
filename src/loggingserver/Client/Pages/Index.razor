@@ -1,0 +1,90 @@
+﻿@page "/"
+@using loggingserver.Shared
+@using Blazor.Extensions
+@using System.Text.Json;
+@inject IJSRuntime jsRuntime
+
+<div class="container-fluid d-flex flex-column h-100">
+
+  <div style="height: 70px;">
+    <div class="col">
+      <nav class="navbar navbar-light bg-light">
+        <span class="navbar-brand mb-0 h1">Simple Logging Server</span>
+        <span class="navbar-text">
+          <button class="btn btn-outline-success" @onclick="_buttonHandler">Clear Log</button>
+        </span>
+      </nav>
+    </div>
+  </div>
+
+  <div style="flex: 1; overflow-y: hidden; overflow-x: hidden">
+    <div class="col h-100">
+      <div id="logContainer">
+        <div id="logScroller" class="inner">
+          @foreach (var log in _logMessages)
+          {
+            <div class="@log.Category">@log.Message</div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-dark text-light" style="height: 30px;">
+    <div class="col"><small>Written in Oct 2019 by Shawty/Digital Solutions UK using .NET core 3 and Blazor - Licence MIT(ish) :-)</small></div>
+  </div>
+
+</div>
+
+@code{
+
+  [Inject]
+  private HubConnectionBuilder _hubConnectionBuilder { get; set; }
+  private HubConnection _connection;
+
+  private List<LogMessage> _logMessages = new List<LogMessage>();
+
+  protected override async Task OnInitializedAsync()
+  {
+    _connection = _hubConnectionBuilder
+          .WithUrl("/logmessage",
+            opt =>
+            {
+              opt.LogLevel = SignalRLogLevel.Debug;
+              opt.Transport = HttpTransportType.WebSockets;
+            })
+          .Build();
+
+    _connection.On<string>("RxdMessage", _logMessageHandler);
+
+    await _connection.StartAsync();
+
+  }
+
+  protected override void OnAfterRender(bool firstRender)
+  {
+    // We have to do the scroll after the render, not after the log line is added
+    // if we don't do it this way, the newest line does not scroll into view
+    _scrollLogContainer();
+  }
+
+  private void _buttonHandler()
+  {
+    _logMessages.Clear();
+  }
+
+  private Task _logMessageHandler(string message)
+  {
+    LogMessage logMessage = JsonSerializer.Deserialize<LogMessage>(message);
+    _logMessages.Add(logMessage);
+    StateHasChanged();
+
+    return Task.CompletedTask;
+  }
+
+  private void _scrollLogContainer()
+  {
+    jsRuntime.InvokeVoidAsync("window.scrollLogContainer");
+  }
+
+}

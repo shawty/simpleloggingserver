@@ -1,0 +1,59 @@
+﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  max-width: 100vw;
+  max-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+}
+
+app {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  background-color: red;
+}
+
+#logContainer {
+  margin: 10px auto;
+  padding: 4px;
+  border: 2px solid grey;
+  border-radius: 5px;
+  overflow-y: hidden;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  height: 98%;
+  max-height: 98%;
+}
+
+  #logContainer .inner {
+    display: block;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-wrap:break-word;
+  }
+
+    #logContainer .inner .INFO {
+      color: #17A2B8;
+      background-color: #D1ECF1;
+    }
+
+    #logContainer .inner .DEBUG {
+      color: #28A745;
+      background-color: #D4EDDA;
+    }
+
+    #logContainer .inner .WARNING {
+      color: #FFC107;
+      background-color: #FFF3CD;
+    }
+
+    #logContainer .inner .ERROR {
+      color: #DC3545;
+      background-color: #F8D7DA;
+    }
